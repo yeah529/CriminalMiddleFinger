@@ -1,0 +1,101 @@
+---
+title       : How long is a criminal's middle finger
+subtitle    : Developing Data Products Project
+author      : Ye Wang
+job         : Master student in Management Information System
+logo        : UMD-Smith-Black.png
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [shiny]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+## Description
+
+1. The original dataset contained data of 3000 male criminals over 20 years old undergoing their sentences in the chief prisons of England and Wales
+2. Processed original data into data frame with 3000 rows and 3 columns
+3. Three variables were 'type', 'height.cm' and 'middle.finger.cm'. The last variable was the dependent variable 
+4. Built linear regression model by using criminals' height to predict their length of middle finger
+
+```{r}
+data(crimtab)
+```
+
+--- .class #id 
+
+## Data Processing
+
+Following is the first ten rows of processed data frame for the dataset. 
+
+```{r echo=FALSE,cache=TRUE}
+data(crimtab)
+cr.finger <- (as.numeric(rownames(crimtab)))
+cr.height <- (as.numeric(colnames(crimtab)))
+
+# Count them
+cr.finger.n = length(cr.finger)
+cr.height.n = length(cr.height)
+
+# Create an empty matrix with two columns - one for height,
+# one for middle finger length
+cr.X = matrix(NA,0,2)
+# Loop over very row (=finger length)
+for (i in 1:cr.finger.n) {
+        # For every row, visit every column (=height)
+        for (j in 1:cr.height.n) { # True if non-zero
+                # From crimtab, get the number of criminals with this
+                # particular combination of finger length and height
+                # If there are more than zero (>0 = TRUE), 
+                if (crimtab[i,j]) {
+                        # Generate that many observations
+                        # Get the number needed
+                        n=crimtab[i,j]
+                        # Duplicate the data pair n times
+                        x = rep(c(cr.height[j],cr.finger[i]),n)
+                        # Use dim() to format it as a matrix
+                        dim(x) = c(2,n)
+                        # Add the matrix to the bottom of the current data mx.
+                        # Note, must transpose, t(), to get n rows by 2 columns.
+                        cr.X = rbind(cr.X,t(x))
+                }
+        }
+}
+# To make it look like an original, random sample, randomize
+# (=shuffle) the rows. See ?sample
+cr.X = cr.X[sample(dim(cr.X)[1]),]
+
+# Create a vector indicating these are criminals
+nRows = dim(cr.X)[1]
+cr.X = data.frame(rep("criminal",nRows),cr.X)
+# Give the columns meaningful names
+colnames(cr.X) = c("type","height.cm","middle.finger.cm")
+
+# Make the source column a factor
+
+crimtab_edited = cr.X
+
+head(crimtab_edited,n = 10)
+```
+
+---
+
+## Model Evaluation
+
+```{r}
+model <- lm(middle.finger.cm~height.cm,data=crimtab_edited)
+summary(model)
+```
+
+
+---
+
+## Application
+
+Please go to the https://jasonwang.shinyapps.io/ShinyProject/ to use the application. 
+
+Loading might be slow, please be patient.
+
+There are specific documentation in the app website. Thank you.
+
+
