@@ -13,10 +13,11 @@ mode        : selfcontained # {standalone, draft}
 
 ## Description
 
-1. The original dataset contained data of 3000 male criminals over 20 years old undergoing their sentences in the chief prisons of England and Wales
-2. Processed original data into data frame with 3000 rows and 3 columns
-3. Three variables were 'type', 'height.cm' and 'middle.finger.cm'. The last variable was the dependent variable 
-4. Built linear regression model by using criminals' height to predict their length of middle finger
+1. The application is for fun. But the experiment is famous, you can find the essay called "identification of criminals"
+2. The original dataset contained data of 3000 male criminals over 20 years old undergoing their sentences in the chief prisons of England and Wales
+3. Processed original data into data frame with 3000 rows and 3 columns
+4. Three variables were 'type', 'height.cm' and 'middle.finger.cm'. The last variable was the dependent variable 
+5. Built linear regression model by using criminals' height to predict their length of middle finger
 
 ```{r}
 data(crimtab)
